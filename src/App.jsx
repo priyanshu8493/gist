@@ -13,42 +13,90 @@ function SparkleIcon({ className = '' }) {
   )
 }
 
-function DocumentIcon({ className = '' }) {
+function UploadIcon({ className = '' }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round"/>
-      <polyline points="14,2 14,8 20,8" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="16" y1="13" x2="8" y2="13" strokeLinecap="round"/>
-      <line x1="16" y1="17" x2="8" y2="17" strokeLinecap="round"/>
-      <line x1="10" y1="9" x2="8" y2="9" strokeLinecap="round"/>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" strokeLinecap="round" strokeLinejoin="round"/>
+      <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round"/>
+      <line x1="12" y1="3" x2="12" y2="15" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   )
 }
 
-function LoadingSpinner() {
+function FileIcon({ className = '' }) {
   return (
-    <div className="relative w-10 h-10">
-      <div className="absolute inset-0 rounded-full border-2 border-white/20"></div>
-      <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-violet-400 animate-spin"></div>
-      <div className="absolute inset-2 rounded-full border-2 border-transparent border-t-fuchsia-400 animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}></div>
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round"/>
+      <polyline points="14,2 14,8 20,8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
+function PanelIcon({ className = '' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <rect x="3" y="3" width="18" height="18" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <line x1="15" y1="3" x2="15" y2="21" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
+function LoadingState() {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-center py-8">
+        <div className="relative">
+          <div className="w-12 h-12 rounded-full border-2 border-slate-700"></div>
+          <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-indigo-500 animate-spin"></div>
+        </div>
+      </div>
+      <div className="space-y-3 px-2">
+        <div className="h-4 bg-slate-800 rounded w-full"></div>
+        <div className="h-4 bg-slate-800/60 rounded w-11/12"></div>
+        <div className="h-4 bg-slate-800/40 rounded w-4/5"></div>
+        <div className="h-4 bg-slate-800/60 rounded w-9/12"></div>
+      </div>
     </div>
   )
 }
 
-function GistSkeleton() {
+function GistCard({ content }) {
   return (
-    <div className="space-y-4 animate-pulse">
-      <div className="h-20 rounded-xl bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-violet-500/10"></div>
-      <div className="space-y-3">
-        <div className="h-3 rounded-full bg-white/5 w-full"></div>
-        <div className="h-3 rounded-full bg-white/5 w-11/12"></div>
-        <div className="h-3 rounded-full bg-white/5 w-4/5"></div>
-        <div className="h-3 rounded-full bg-white/5 w-9/12"></div>
+    <div className="space-y-5">
+      <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-medium text-indigo-400 uppercase tracking-wider">Selected</span>
+        </div>
+        <p className="text-sm text-slate-300 leading-relaxed">"{content.analyzedText}"</p>
       </div>
-      <div className="space-y-2 pt-2">
-        <div className="h-3 rounded-full bg-white/5 w-full"></div>
-        <div className="h-3 rounded-full bg-white/5 w-10/12"></div>
-        <div className="h-3 rounded-full bg-white/5 w-8/12"></div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <SparkleIcon className="w-4 h-4 text-indigo-400" />
+          <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Explanation</span>
+        </div>
+        <div className="space-y-3">
+          {content.explanation.split('. ').filter(Boolean).map((sentence, i) => (
+            <p key={i} className="text-sm text-slate-400 leading-relaxed">
+              {sentence.trim()}{sentence.endsWith('.') ? '' : '.'}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex gap-2 pt-2">
+        <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm text-slate-300 transition-colors">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+          Share
+        </button>
+        <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm text-slate-300 transition-colors">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+          Save
+        </button>
       </div>
     </div>
   )
@@ -64,8 +112,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [pdfScale, setPdfScale] = useState(1)
   const viewerRef = useRef(null)
   const fileInputRef = useRef(null)
+  const panelRef = useRef(null)
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages)
@@ -79,6 +129,7 @@ function App() {
       setButtonPosition(null)
       setPanelOpen(false)
       setGistContent(null)
+      setPageNumber(1)
     }
   }
 
@@ -99,8 +150,7 @@ function App() {
   const handleDrop = (e) => {
     e.preventDefault()
     setIsDragging(false)
-    const file = e.dataTransfer.files[0]
-    handleFile(file)
+    handleFile(e.dataTransfer.files[0])
   }
 
   const hideFloatingButton = useCallback(() => {
@@ -132,6 +182,32 @@ function App() {
     return () => document.removeEventListener('mouseup', handleMouseUp)
   }, [buttonPosition, hideFloatingButton])
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!pdfFile) return
+      
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        setPageNumber(p => Math.max(1, p - 1))
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        setPageNumber(p => Math.min(numPages, p + 1))
+      } else if (e.key === '=' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setPdfScale(s => Math.min(2, s + 0.1))
+      } else if (e.key === '-' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setPdfScale(s => Math.max(0.5, s - 0.1))
+      } else if (e.key === '0' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setPdfScale(1)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [pdfFile, numPages])
+
   const handleGetGist = async () => {
     if (!selectedText) return
 
@@ -140,8 +216,7 @@ function App() {
     setIsLoading(true)
     setGistContent(null)
 
-    // TODO: Replace this mock implementation with your LLM API call
-    // Example structure:
+    // TODO: Replace this mock with your LLM API call
     // const response = await fetch('/api/gist', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
@@ -152,16 +227,15 @@ function App() {
     await new Promise(resolve => setTimeout(resolve, 1500))
 
     const mockExplanations = [
-      `This passage introduces fundamental concepts that build upon each other progressively. The core idea here relates to establishing a foundation for understanding more complex principles discussed later in the document. Breaking this down: the author establishes context, presents key definitions, and then demonstrates practical applications through concrete examples.`,
-      `Analyzing this section reveals multiple layers of meaning. Beyond the surface-level explanation, there's an underlying assumption about reader familiarity with prerequisite concepts. The text strategically positions these ideas to prepare you for advanced topics that follow, creating a logical progression of knowledge.`,
-      `This content appears to bridge theoretical concepts with real-world applications. Notice how the author balances technical precision with accessibility, making complex ideas digestible. The implications here extend beyond immediate comprehension—you'll find these principles resurface throughout subsequent chapters.`,
-      `The significance of this passage lies in its role as a turning point in the argument. Here, the author shifts from establishing facts to drawing conclusions. Pay attention to the logical connectors ("therefore," "consequently," "this means")—they signal the transition from evidence to interpretation.`
+      `This passage introduces fundamental concepts that build upon each other progressively. The core idea establishes a foundation for understanding more complex principles. The author presents key definitions and demonstrates practical applications through concrete examples.`,
+      `Analyzing this section reveals multiple layers of meaning. Beyond the surface-level explanation, there's an underlying assumption about reader familiarity with prerequisite concepts. The text strategically positions these ideas to prepare you for advanced topics.`,
+      `This content bridges theoretical concepts with real-world applications. Notice how the author balances technical precision with accessibility, making complex ideas digestible. The implications extend beyond immediate comprehension.`,
+      `The significance of this passage lies in its role as a pivotal point in the argument. Here, the author shifts from establishing facts to drawing conclusions. Pay attention to logical connectors that signal the transition from evidence to interpretation.`
     ]
 
     setGistContent({
       analyzedText: selectedText,
-      explanation: mockExplanations[Math.floor(Math.random() * mockExplanations.length)],
-      timestamp: new Date().toISOString()
+      explanation: mockExplanations[Math.floor(Math.random() * mockExplanations.length)]
     })
     setIsLoading(false)
   }
@@ -171,74 +245,165 @@ function App() {
     setTimeout(() => {
       setGistContent(null)
       setSelectedText('')
-    }, 300)
+    }, 200)
   }
 
-  const goToPage = (page) => {
-    if (page >= 1 && page <= numPages) {
-      setPageNumber(page)
-    }
+  const resetPdf = () => {
+    setPdfFile(null)
+    setNumPages(null)
+    setPageNumber(1)
+    setGistContent(null)
+    setPanelOpen(false)
   }
+
+  const containerWidth = typeof window !== 'undefined' ? window.innerWidth : 1400
+  const sidebarWidth = panelOpen ? 400 : 0
+  const availableWidth = containerWidth - 280 - sidebarWidth
+  const pdfWidth = Math.min(720, availableWidth - 80)
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white font-sans overflow-hidden">
-      {/* Ambient background effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-[128px]"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-500/20 rounded-full blur-[128px]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
-      </div>
-
-      {/* Header */}
-      <header className="relative z-10 backdrop-blur-xl bg-white/5 border-b border-white/10 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
-              <SparkleIcon className="w-4 h-4 text-white" />
+    <div className="h-screen bg-slate-950 text-white font-sans flex flex-col overflow-hidden">
+      {/* Top Bar */}
+      <header className="h-14 flex-shrink-0 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-sm px-4 flex items-center justify-between z-20">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center">
+              <SparkleIcon className="w-3.5 h-3.5 text-white" />
             </div>
-            <span className="text-lg font-semibold tracking-tight">Gist</span>
+            <span className="text-sm font-semibold text-slate-200 tracking-tight">Gist</span>
           </div>
+          
           {pdfFile && (
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-white/50">{pdfFile.name}</span>
-              <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                <span className="text-xs text-white/70">Page</span>
+            <>
+              <div className="w-px h-5 bg-slate-700/60"></div>
+              <button
+                onClick={resetPdf}
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-md text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                </svg>
+                <span>New File</span>
+              </button>
+            </>
+          )}
+        </div>
+
+        {pdfFile && (
+          <div className="flex items-center gap-3">
+            {/* Zoom controls */}
+            <div className="flex items-center gap-1 px-1 py-0.5 rounded-lg bg-slate-900/50 border border-slate-800/50">
+              <button
+                onClick={() => setPdfScale(s => Math.max(0.5, s - 0.1))}
+                className="w-7 h-7 flex items-center justify-center rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors"
+                title="Zoom out (Cmd+-)"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                </svg>
+              </button>
+              <span className="w-14 text-center text-xs font-medium text-slate-400">{Math.round(pdfScale * 100)}%</span>
+              <button
+                onClick={() => setPdfScale(s => Math.min(2, s + 0.1))}
+                className="w-7 h-7 flex items-center justify-center rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors"
+                title="Zoom in (Cmd++)"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
+              <button
+                onClick={() => setPdfScale(1)}
+                className="w-7 h-7 flex items-center justify-center rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors text-xs font-medium"
+                title="Reset zoom (Cmd+0)"
+              >
+                Fit
+              </button>
+            </div>
+
+            <div className="w-px h-5 bg-slate-700/60"></div>
+
+            {/* Page navigation */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setPageNumber(p => Math.max(1, p - 1))}
+                disabled={pageNumber <= 1}
+                className="w-8 h-8 flex items-center justify-center rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                title="Previous page (←)"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-slate-900/50 border border-slate-800/50">
                 <input
                   type="number"
                   min={1}
                   max={numPages}
                   value={pageNumber}
-                  onChange={(e) => goToPage(parseInt(e.target.value) || 1)}
-                  className="w-10 bg-transparent text-center text-sm font-medium focus:outline-none"
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value)
+                    if (val >= 1 && val <= numPages) setPageNumber(val)
+                  }}
+                  className="w-8 bg-transparent text-center text-sm font-medium text-slate-200 focus:outline-none"
                 />
-                <span className="text-xs text-white/50">of {numPages}</span>
+                <span className="text-slate-500 text-sm">/</span>
+                <span className="text-slate-500 text-sm">{numPages}</span>
               </div>
+              
+              <button
+                onClick={() => setPageNumber(p => Math.min(numPages, p + 1))}
+                disabled={pageNumber >= numPages}
+                className="w-8 h-8 flex items-center justify-center rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                title="Next page (→)"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
-          )}
-        </div>
+
+            <div className="w-px h-5 bg-slate-700/60"></div>
+
+            {/* Toggle panel */}
+            <button
+              onClick={() => setPanelOpen(!panelOpen)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                panelOpen
+                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+            >
+              <PanelIcon className="w-4 h-4" />
+              <span>AI Panel</span>
+            </button>
+          </div>
+        )}
       </header>
 
-      {/* Main content */}
-      <main className="relative z-10 flex h-[calc(100vh-65px)]">
-        {/* PDF Viewer area */}
-        <div className="flex-1 overflow-auto p-8">
-          <div className="max-w-2xl mx-auto">
+      {/* Main Content */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Sidebar - File List / Tools */}
+        <aside className="w-64 flex-shrink-0 border-r border-slate-800/60 bg-slate-950/50 flex flex-col">
+          <div className="p-4 border-b border-slate-800/60">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Document</span>
+            </div>
+            
             {!pdfFile ? (
               <div
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
                 className={`
-                  relative group
-                  bg-gradient-to-b from-white/[0.08] to-white/[0.02]
-                  border-2 border-dashed rounded-3xl p-16
-                  transition-all duration-300 cursor-pointer
+                  relative flex flex-col items-center justify-center p-6 rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200
                   ${isDragging
-                    ? 'border-violet-400 bg-violet-500/10 scale-[1.02]'
-                    : 'border-white/10 hover:border-white/20 hover:bg-white/[0.04]'
+                    ? 'border-indigo-500/60 bg-indigo-500/5'
+                    : 'border-slate-700/50 hover:border-slate-600 hover:bg-slate-900/30'
                   }
                 `}
-                onClick={() => fileInputRef.current?.click()}
               >
                 <input
                   ref={fileInputRef}
@@ -247,138 +412,97 @@ function App() {
                   onChange={handleFileChange}
                   className="hidden"
                 />
-
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-violet-500/0 via-fuchsia-500/0 to-violet-500/0 group-hover:from-violet-500/10 group-hover:via-fuchsia-500/5 group-hover:to-violet-500/10 transition-all duration-500 pointer-events-none"></div>
-
-                <div className={`relative transition-transform duration-300 ${isDragging ? 'scale-110' : 'group-hover:scale-105'}`}>
-                  {/* Animated document icon */}
-                  <div className="relative w-24 h-24 mx-auto mb-8">
-                    <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 rounded-2xl blur-xl"></div>
-                    <div className="relative w-full h-full rounded-2xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 border border-white/10 flex items-center justify-center backdrop-blur-sm">
-                      <DocumentIcon className="w-10 h-10 text-white/80" />
-                    </div>
-                    {/* Floating sparkle */}
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg animate-bounce" style={{ animationDuration: '2s' }}>
-                      <SparkleIcon className="w-3 h-3 text-white" />
-                    </div>
+                
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors ${isDragging ? 'bg-indigo-500/20' : 'bg-slate-800/50'}`}>
+                  <UploadIcon className={`w-5 h-5 ${isDragging ? 'text-indigo-400' : 'text-slate-400'}`} />
+                </div>
+                
+                <span className="text-sm text-slate-400 text-center">
+                  {isDragging ? 'Drop PDF here' : 'Drop PDF or click'}
+                </span>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-2 rounded-lg bg-slate-900/50 border border-slate-800/50">
+                  <div className="w-8 h-8 rounded bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                    <FileIcon className="w-4 h-4 text-red-400" />
                   </div>
-
-                  <h2 className="text-2xl font-semibold text-center mb-3 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-                    {isDragging ? 'Drop your PDF here' : 'Upload a PDF to begin'}
-                  </h2>
-                  <p className="text-center text-white/50 mb-8 max-w-sm mx-auto">
-                    {isDragging
-                      ? 'Release to start exploring'
-                      : 'Drag and drop a PDF file, or click anywhere to browse'
-                    }
-                  </p>
-
-                  {/* Feature hints */}
-                  <div className="flex items-center justify-center gap-8 text-sm text-white/40">
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 232l-7-7 7-7" />
-                        </svg>
-                      </div>
-                      <span>Select text</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
-                        <SparkleIcon className="w-3 h-3" />
-                      </div>
-                      <span>Get explanations</span>
-                    </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-slate-200 truncate">{pdfFile.name}</p>
+                    <p className="text-xs text-slate-500">{numPages} pages</p>
                   </div>
                 </div>
               </div>
-            ) : (
-              <div className="space-y-6 transition-all duration-500">
-                {/* PDF controls */}
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm">
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => setPdfFile(null)}
-                      className="p-2 rounded-xl hover:bg-white/10 transition-colors"
-                      title="Remove PDF"
-                    >
-                      <svg className="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                    <div className="w-px h-6 bg-white/10"></div>
-                    <button
-                      onClick={() => goToPage(pageNumber - 1)}
-                      disabled={pageNumber <= 1}
-                      className="p-2 rounded-xl hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10">
-                      <span className="text-sm font-medium">{pageNumber}</span>
-                      <span className="text-white/30">/</span>
-                      <span className="text-sm text-white/50">{numPages}</span>
-                    </div>
-                    <button
-                      onClick={() => goToPage(pageNumber + 1)}
-                      disabled={pageNumber >= numPages}
-                      className="p-2 rounded-xl hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </div>
+            )}
+          </div>
 
-                  {/* Page thumbnails - simplified */}
-                  <div className="flex items-center gap-2">
-                    {numPages && numPages > 1 && Array.from({ length: Math.min(5, numPages) }, (_, i) => {
-                      const page = i === 0 ? 1 : i === 4 ? numPages : pageNumber + i - 2
-                      if (page < 1 || page > numPages) return null
-                      return (
-                        <button
-                          key={page}
-                          onClick={() => goToPage(page)}
-                          className={`w-8 h-8 rounded-lg text-xs font-medium transition-all ${
-                            page === pageNumber
-                              ? 'bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white'
-                              : 'bg-white/5 hover:bg-white/10 text-white/50'
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      )
-                    })}
+          {/* Keyboard shortcuts hint */}
+          <div className="p-4 mt-auto border-t border-slate-800/60">
+            <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Shortcuts</span>
+            <div className="mt-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-500">Navigate pages</span>
+                <kbd className="px-1.5 py-0.5 rounded bg-slate-900/50 border border-slate-800/50 text-xs text-slate-400 font-mono">← →</kbd>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-500">Zoom</span>
+                <div className="flex gap-1">
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-900/50 border border-slate-800/50 text-xs text-slate-400 font-mono">⌘+</kbd>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-900/50 border border-slate-800/50 text-xs text-slate-400 font-mono">⌘-</kbd>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* PDF Viewer */}
+        <main className="flex-1 flex flex-col overflow-hidden bg-slate-900/20">
+          {!pdfFile ? (
+            <div className="flex-1 flex items-center justify-center p-8">
+              <div className="text-center max-w-md">
+                <div className="relative inline-block mb-6">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-indigo-600/10 border border-indigo-500/20 flex items-center justify-center">
+                    <SparkleIcon className="w-10 h-10 text-indigo-400" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+                    <SparkleIcon className="w-2.5 h-2.5 text-white" />
                   </div>
                 </div>
-
-                {/* PDF Viewer */}
+                
+                <h2 className="text-xl font-semibold text-slate-100 mb-2">Upload a PDF to start</h2>
+                <p className="text-sm text-slate-500 mb-6">Select any text to get AI-powered explanations instantly</p>
+                
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors"
+                >
+                  <UploadIcon className="w-4 h-4" />
+                  Choose File
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 overflow-auto p-8">
+              <div className="mx-auto" style={{ width: pdfWidth }}>
                 <div
                   ref={viewerRef}
-                  className="relative rounded-2xl overflow-hidden bg-white shadow-2xl"
+                  className="relative bg-white rounded-lg overflow-hidden shadow-2xl"
                   style={{
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)'
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6)'
                   }}
                 >
-                  {/* Page glow */}
-                  <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-white/10 via-transparent to-white/5 pointer-events-none"></div>
-
                   <Document
                     file={pdfFile}
                     onLoadSuccess={onDocumentLoadSuccess}
                     loading={
-                      <div className="flex flex-col items-center justify-center h-96 gap-4">
-                        <LoadingSpinner />
-                        <span className="text-sm text-white/50">Loading document...</span>
+                      <div className="flex items-center justify-center h-96">
+                        <LoadingState />
                       </div>
                     }
                   >
                     <Page
                       pageNumber={pageNumber}
-                      width={Math.min(680, typeof window !== 'undefined' ? window.innerWidth - 128 : 680)}
+                      scale={pdfScale}
                       renderTextLayer={true}
                       renderAnnotationLayer={true}
                     />
@@ -388,191 +512,166 @@ function App() {
                   {buttonPosition && (
                     <button
                       onClick={handleGetGist}
-                      className="group absolute z-20 flex items-center gap-2 px-5 py-2.5 rounded-full
-                        bg-gradient-to-r from-violet-600 to-fuchsia-600
+                      className="group absolute z-20 flex items-center gap-2.5 px-4 py-2.5 rounded-full
+                        bg-indigo-600 hover:bg-indigo-500
                         text-white text-sm font-medium
-                        shadow-[0_0_40px_rgba(139,92,246,0.5)]
-                        hover:shadow-[0_0_60px_rgba(139,92,246,0.7)]
+                        shadow-lg shadow-indigo-500/30
+                        hover:shadow-xl hover:shadow-indigo-500/40
                         active:scale-95
-                        transition-all duration-200"
+                        transition-all duration-150"
                       style={{
                         top: buttonPosition.top,
                         left: buttonPosition.left,
-                        transform: 'translate(-50%, -100%)',
-                        animation: 'floatIn 0.2s ease-out'
+                        transform: 'translate(-50%, -100%)'
                       }}
                     >
-                      <SparkleIcon className="w-4 h-4 animate-pulse" />
+                      <SparkleIcon className="w-4 h-4" />
                       <span>Get Gist</span>
-                      <div className="w-1 h-1 rounded-full bg-white/50"></div>
-                      <span className="text-white/70 text-xs max-w-32 truncate">
-                        {selectedText.slice(0, 20)}{selectedText.length > 20 ? '...' : ''}
+                      <span className="w-px h-4 bg-white/30"></span>
+                      <span className="text-white/70 text-xs max-w-24 truncate">
+                        {selectedText.slice(0, 18)}{selectedText.length > 18 ? '...' : ''}
                       </span>
                     </button>
                   )}
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Side panel */}
-        <div
-          className={`
-            w-96 border-l border-white/10 backdrop-blur-xl bg-gradient-to-b from-white/[0.03] to-transparent
-            transition-all duration-300 ease-out flex flex-col
-            ${panelOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}
-          `}
-        >
-          {/* Panel header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 border border-white/10 flex items-center justify-center">
-                <SparkleIcon className="w-4 h-4 text-violet-400" />
-              </div>
-              <div>
-                <h2 className="font-semibold text-sm">AI Gist</h2>
-                <p className="text-xs text-white/40">Powered by advanced reasoning</p>
+                {/* Page indicator */}
+                <div className="flex items-center justify-center gap-4 mt-6 pb-4">
+                  <button
+                    onClick={() => setPageNumber(p => Math.max(1, p - 1))}
+                    disabled={pageNumber <= 1}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(10, numPages) }, (_, i) => {
+                      let page
+                      if (numPages <= 10) {
+                        page = i + 1
+                      } else if (pageNumber <= 6) {
+                        page = i + 1
+                        if (i === 9) page = numPages
+                      } else if (pageNumber >= numPages - 5) {
+                        page = numPages - 9 + i
+                        if (i === 0) page = 1
+                      } else {
+                        page = pageNumber - 5 + i
+                        if (i === 0) page = 1
+                        if (i === 9) page = numPages
+                      }
+                      
+                      const isActive = page === pageNumber
+                      const isEllipsis = (i === 0 && page !== 1) || (i === 9 && page !== numPages)
+                      
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => setPageNumber(page)}
+                          className={`w-7 h-7 rounded text-xs font-medium transition-all ${
+                            isActive
+                              ? 'bg-indigo-600 text-white'
+                              : isEllipsis
+                              ? 'text-slate-600 cursor-default'
+                              : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
+                          }`}
+                          disabled={isEllipsis}
+                        >
+                          {isEllipsis ? '...' : page}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  
+                  <button
+                    onClick={() => setPageNumber(p => Math.min(numPages, p + 1))}
+                    disabled={pageNumber >= numPages}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-            <button
-              onClick={closePanel}
-              className="p-2 rounded-xl hover:bg-white/10 transition-colors"
-            >
-              <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+          )}
+        </main>
 
-          {/* Panel content */}
-          <div className="flex-1 overflow-auto p-5">
-            {isLoading ? (
-              <GistSkeleton />
-            ) : gistContent ? (
-              <div className="space-y-5 animate-fadeIn">
-                {/* Selected text card */}
-                <div className="relative p-4 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20 overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent"></div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-5 h-5 rounded bg-violet-500/20 flex items-center justify-center">
-                      <svg className="w-3 h-3 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs font-medium text-violet-400 uppercase tracking-wider">Selected Text</span>
+        {/* AI Panel */}
+        <aside
+          ref={panelRef}
+          className={`flex-shrink-0 border-l border-slate-800/60 bg-slate-950/80 backdrop-blur-sm flex flex-col transition-all duration-200 ease-out ${
+            panelOpen ? 'w-96' : 'w-0 overflow-hidden'
+          }`}
+        >
+          {panelOpen && (
+            <>
+              <div className="p-4 border-b border-slate-800/60 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+                    <SparkleIcon className="w-4 h-4 text-indigo-400" />
                   </div>
-                  <p className="text-sm text-white/80 leading-relaxed italic">
-                    "{gistContent.analyzedText}"
-                  </p>
-                </div>
-
-                {/* Explanation */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded bg-fuchsia-500/20 flex items-center justify-center">
-                      <svg className="w-3 h-3 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs font-medium text-fuchsia-400 uppercase tracking-wider">Explanation</span>
+                  <div>
+                    <h2 className="text-sm font-semibold text-slate-200">AI Gist</h2>
+                    <p className="text-xs text-slate-500">Powered by advanced AI</p>
                   </div>
-                  <p className="text-sm text-white/70 leading-relaxed">
-                    {gistContent.explanation}
-                  </p>
                 </div>
-
-                {/* Action buttons */}
-                <div className="flex gap-3 pt-4">
-                  <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium transition-all">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                    Share
-                  </button>
-                  <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium transition-all">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                    </svg>
-                    Save
-                  </button>
-                </div>
-
-                {/* Metadata */}
-                <div className="flex items-center justify-between pt-4 border-t border-white/5 text-xs text-white/30">
-                  <span>Generated just now</span>
-                  <span>Using GPT-4</span>
-                </div>
+                <button
+                  onClick={closePanel}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full text-center py-12">
-                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
-                  <SparkleIcon className="w-8 h-8 text-white/20" />
-                </div>
-                <h3 className="font-medium text-white/50 mb-2">Ready to analyze</h3>
-                <p className="text-sm text-white/30 max-w-[240px]">
-                  Select any text in your PDF and click "Get Gist" for an AI-powered explanation
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
 
-      {/* Global styles for animations */}
+              <div className="flex-1 overflow-auto p-4">
+                {isLoading ? (
+                  <LoadingState />
+                ) : gistContent ? (
+                  <GistCard content={gistContent} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-12">
+                    <div className="w-14 h-14 rounded-xl bg-slate-900/50 border border-slate-800/50 flex items-center justify-center mb-4">
+                      <SparkleIcon className="w-7 h-7 text-slate-600" />
+                    </div>
+                    <h3 className="text-sm font-medium text-slate-400 mb-2">No selection yet</h3>
+                    <p className="text-xs text-slate-600 max-w-[200px]">
+                      Select text in your PDF and click "Get Gist" for an explanation
+                    </p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </aside>
+      </div>
+
       <style>{`
-        @keyframes floatIn {
-          from {
-            opacity: 0;
-            transform: translate(-50%, -90%) scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: translate(-50%, -100%) scale(1);
-          }
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.4s ease-out;
-        }
-        
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
+          width: 6px;
+          height: 6px;
         }
-        
         ::-webkit-scrollbar-track {
           background: transparent;
         }
-        
         ::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
+          background: rgba(148, 163, 184, 0.2);
+          border-radius: 3px;
         }
-        
         ::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(148, 163, 184, 0.3);
         }
-        
-        /* Selection color */
         ::selection {
-          background: rgba(139, 92, 246, 0.3);
-          color: white;
+          background: rgba(99, 102, 241, 0.3);
         }
-        
-        /* PDF text selection */
         .react-pdf__Page__textContent {
           user-select: text !important;
-        }
-        
-        .react-pdf__Page__textContent span::selection {
-          background: rgba(139, 92, 246, 0.3) !important;
         }
       `}</style>
     </div>
