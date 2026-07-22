@@ -166,10 +166,24 @@ function Library({ library, onSelectBook, onDeleteBook, onAddBook }) {
   const stats = useMemo(() => ({ total: library.length, reading: library.filter(b => b.lastPage && b.totalPages && b.lastPage < b.totalPages).length, pages: library.reduce((acc, b) => acc + (b.lastPage || 0), 0) }), [library])
 
   const features = [
-    { icon: <Icons.Sparkle />, title: 'Smart Explanations', desc: 'Get instant AI-powered insights on any passage', gradient: 'from-blue-500/10 to-indigo-500/10', border: 'border-blue-200/60', iconColor: 'text-blue-600', iconBg: 'bg-blue-500/10' },
-    { icon: <Icons.Maximize />, title: 'Full Page Analysis', desc: 'Understand entire pages with one click', gradient: 'from-violet-500/10 to-purple-500/10', border: 'border-violet-200/60', iconColor: 'text-violet-600', iconBg: 'bg-violet-500/10' },
-    { icon: <Icons.Lightbulb />, title: 'Key Takeaways', desc: 'Extract main points automatically', gradient: 'from-amber-500/10 to-orange-500/10', border: 'border-amber-200/60', iconColor: 'text-amber-600', iconBg: 'bg-amber-500/10' },
-    { icon: <Icons.MessageSquare />, title: 'Interactive Chat', desc: 'Ask follow-up questions naturally', gradient: 'from-emerald-500/10 to-teal-500/10', border: 'border-emerald-200/60', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-500/10' },
+    { icon: <Icons.Sparkle />, title: 'Instant Gists', desc: 'Select any text and get a clear, concise explanation in seconds', gradient: 'from-blue-500/10 to-indigo-500/10', border: 'border-blue-200/60', iconColor: 'text-blue-600', iconBg: 'bg-blue-500/10' },
+    { icon: <Icons.Maximize />, title: 'Page Summaries', desc: 'Comprehend entire pages with a single click — no more skimming', gradient: 'from-violet-500/10 to-purple-500/10', border: 'border-violet-200/60', iconColor: 'text-violet-600', iconBg: 'bg-violet-500/10' },
+    { icon: <Icons.Lightbulb />, title: 'Multi-Language', desc: 'Get explanations in English, Hindi, or Bengali — learn in your language', gradient: 'from-amber-500/10 to-orange-500/10', border: 'border-amber-200/60', iconColor: 'text-amber-600', iconBg: 'bg-amber-500/10' },
+    { icon: <Icons.MessageSquare />, title: 'Ask Anything', desc: 'Chat with an AI that understands the context of your document', gradient: 'from-emerald-500/10 to-teal-500/10', border: 'border-emerald-200/60', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-500/10' },
+  ]
+
+  const stats_data = [
+    { value: '< 2s', label: 'Explanation speed' },
+    { value: '3', label: 'Languages supported' },
+    { value: '100%', label: 'Free to use' },
+    { value: '0', label: 'Sign-up required' },
+  ]
+
+  const useCases = [
+    { emoji: '🎓', title: 'Students', desc: 'Understand textbooks and research papers faster' },
+    { emoji: '💼', title: 'Professionals', desc: 'Digest reports, contracts, and whitepapers' },
+    { emoji: '🔬', title: 'Researchers', desc: 'Navigate academic literature with AI assistance' },
+    { emoji: '📚', title: 'Lifelong Learners', desc: 'Make any document accessible and engaging' },
   ]
 
   return (
@@ -181,8 +195,8 @@ function Library({ library, onSelectBook, onDeleteBook, onAddBook }) {
               <span className="w-5 h-5 text-white"><Icons.Sparkle /></span>
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-gray-900 tracking-tight">Gist</h1>
-              <p className="text-xs text-gray-500 -mt-0.5">Your reading companion</p>
+              <h1 className="text-xl font-bold text-gray-900 tracking-tight">Gist</h1>
+              <p className="text-xs text-gray-400 -mt-0.5">AI Reading Companion</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -201,39 +215,49 @@ function Library({ library, onSelectBook, onDeleteBook, onAddBook }) {
         </div>
       </header>
 
-      <section className="max-w-6xl mx-auto px-6 pt-16 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-8 relative">
+        <div className="hero-glow bg-blue-500 -top-20 -left-40" />
+        <div className="hero-glow bg-purple-500 top-0 -right-40" />
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center relative">
           <div className="lg:col-span-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 mb-6 animate-fade-in-up">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-xs font-medium text-blue-600">Powered by AI</span>
+              <span className="text-xs font-medium text-blue-600">Now in open beta</span>
             </div>
-            <h2 className="text-5xl font-semibold text-gray-900 tracking-tight leading-[1.1]">
-              Read smarter,<br />
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">understand deeper.</span>
+            <h2 className="text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight leading-[1.08] animate-fade-in-up" style={{ animationDelay: '80ms' }}>
+              Stop skimming.<br />
+              <span className="text-gradient">Start understanding.</span>
             </h2>
-            <p className="mt-5 text-lg text-gray-500 leading-relaxed max-w-lg">
-              Upload any PDF and get instant AI explanations for any passage. Highlight, ask, and learn in seconds.
+            <p className="mt-5 text-lg text-gray-500 leading-relaxed max-w-lg animate-fade-in-up" style={{ animationDelay: '160ms' }}>
+              Gist turns any PDF into an interactive learning experience. Select text, get instant AI explanations, and ask follow-up questions — all in your language.
             </p>
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-8 flex items-center gap-4 animate-fade-in-up" style={{ animationDelay: '240ms' }}>
               <button onClick={() => fileInputRef.current?.click()} 
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium transition-all shadow-lg shadow-gray-900/20 hover:shadow-xl hover:shadow-gray-900/30 hover:-translate-y-0.5">
-                <span className="w-5 h-5"><Icons.Upload /></span> Upload PDF
+                className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-semibold transition-all shadow-lg shadow-gray-900/20 hover:shadow-xl hover:shadow-gray-900/30 hover:-translate-y-0.5 active:scale-[0.98]">
+                <span className="w-5 h-5"><Icons.Upload /></span> Get Started Free
               </button>
               {library.length > 0 && (
-                <span className="text-sm text-gray-500">{library.length} book{library.length !== 1 ? 's' : ''} in library</span>
+                <span className="text-sm text-gray-400">{library.length} book{library.length !== 1 ? 's' : ''} in your library</span>
               )}
+            </div>
+            <div className="mt-8 flex items-center gap-8 animate-fade-in-up" style={{ animationDelay: '320ms' }}>
+              {stats_data.map((s, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-xl font-bold text-gray-900">{s.value}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{s.label}</div>
+                </div>
+              ))}
             </div>
           </div>
           <div className="lg:col-span-2">
             <div className="grid grid-cols-2 gap-3">
               {features.map((f, i) => (
-                <div key={i} className={`p-4 rounded-xl bg-gradient-to-br ${f.gradient} border ${f.border} animate-fade-in-up hover:scale-[1.02] transition-transform duration-200`} style={{ animationDelay: `${i * 100 + 200}ms` }}>
-                  <div className={`w-9 h-9 rounded-lg ${f.iconBg} flex items-center justify-center mb-3`}>
-                    <span className={`w-4.5 h-4.5 ${f.iconColor}`}>{f.icon}</span>
+                <div key={i} className={`p-4 rounded-2xl bg-gradient-to-br ${f.gradient} border ${f.border} animate-fade-in-up hover:scale-[1.03] hover:shadow-lg transition-all duration-300 cursor-default`} style={{ animationDelay: `${i * 100 + 200}ms` }}>
+                  <div className={`w-10 h-10 rounded-xl ${f.iconBg} flex items-center justify-center mb-3`}>
+                    <span className={`w-5 h-5 ${f.iconColor}`}>{f.icon}</span>
                   </div>
-                  <h3 className="text-sm font-semibold text-gray-900">{f.title}</h3>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">{f.desc}</p>
+                  <h3 className="text-sm font-bold text-gray-900">{f.title}</h3>
+                  <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -261,18 +285,64 @@ function Library({ library, onSelectBook, onDeleteBook, onAddBook }) {
         </section>
       )}
 
+      <section className="max-w-6xl mx-auto px-6 py-12 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+        <div className="text-center mb-10">
+          <h3 className="text-2xl font-bold text-gray-900 tracking-tight">Built for everyone who reads</h3>
+          <p className="text-gray-500 mt-2">Whether you're studying, working, or just curious — Gist helps you get more from every page.</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {useCases.map((uc, i) => (
+            <div key={i} className="p-5 rounded-2xl bg-white border border-gray-200/60 hover:shadow-lg hover:border-gray-300 transition-all duration-300 text-center cursor-default" style={{ animationDelay: `${i * 80 + 500}ms` }}>
+              <div className="text-3xl mb-3">{uc.emoji}</div>
+              <h4 className="text-sm font-bold text-gray-900">{uc.title}</h4>
+              <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">{uc.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-6 py-8">
+        <div className="relative rounded-3xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-12 text-center overflow-hidden animate-fade-in-up" style={{ animationDelay: '600ms' }}>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-blue-500 filter blur-[120px]" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-purple-500 filter blur-[120px]" />
+          </div>
+          <div className="relative">
+            <h3 className="text-3xl font-bold text-white tracking-tight">Ready to read smarter?</h3>
+            <p className="text-gray-400 mt-3 max-w-md mx-auto">Upload your first PDF and experience the future of reading. No sign-up required.</p>
+            <button onClick={() => fileInputRef.current?.click()} 
+              className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white hover:bg-gray-100 text-gray-900 font-semibold transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98]">
+              <span className="w-5 h-5"><Icons.Upload /></span> Upload a PDF Now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <footer className="max-w-6xl mx-auto px-6 py-8 mt-8 border-t border-gray-200/60">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 flex items-center justify-center">
+              <span className="w-3.5 h-3.5 text-white"><Icons.Sparkle /></span>
+            </div>
+            <span className="text-sm font-semibold text-gray-900">Gist</span>
+          </div>
+          <p className="text-xs text-gray-400">AI-powered reading, reimagined.</p>
+        </div>
+      </footer>
+
       <main className="max-w-6xl mx-auto px-6 pb-24">
         {library.length === 0 ? (
-          <div className="py-24 text-center">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center mx-auto mb-6 border border-gray-200/60">
-              <span className="w-10 h-10 text-gray-400"><Icons.Book /></span>
+          <div className="py-24 text-center animate-fade-in-up">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center mx-auto mb-6 border border-blue-100/60">
+              <span className="w-10 h-10 text-blue-500"><Icons.Book /></span>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Your library is empty</h3>
-            <p className="text-gray-500 mb-6 max-w-sm mx-auto">Upload your first PDF to start getting AI-powered explanations and insights.</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Your library awaits</h3>
+            <p className="text-gray-500 mb-8 max-w-sm mx-auto leading-relaxed">Upload your first PDF and unlock AI-powered explanations, summaries, and interactive learning.</p>
             <button onClick={() => fileInputRef.current?.click()} 
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium transition-colors">
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-semibold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98]">
               <span className="w-4 h-4"><Icons.Plus /></span> Upload Your First PDF
             </button>
+            <p className="text-xs text-gray-400 mt-4">Supports any PDF — textbooks, papers, reports, articles</p>
           </div>
         ) : (
           <>
@@ -311,11 +381,11 @@ function ChatMessage({ message }) {
   const isUser = message.role === 'user'
   return (
     <div className={`flex gap-3 animate-fade-in-up ${isUser ? 'flex-row-reverse' : ''}`}>
-      <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${isUser ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-500 to-indigo-500'}`}>
+      <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${isUser ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-500 to-indigo-500 shadow-md shadow-blue-500/20'}`}>
         {isUser ? <span className="w-3.5 h-3.5 text-white"><Icons.User /></span> : <span className="w-3.5 h-3.5 text-white"><Icons.Sparkle /></span>}
       </div>
       <div className={`max-w-[85%] ${isUser ? 'text-right' : ''}`}>
-        <div className={`inline-block px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${isUser ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'}`}>
+        <div className={`inline-block px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${isUser ? 'bg-gray-900 text-white shadow-md' : 'bg-gray-100 text-gray-800'}`}>
           {message.content}
         </div>
       </div>
@@ -468,11 +538,11 @@ function PDFReader({ bookId, library, onUpdateBook, onClose }) {
               <span className="w-5 h-5"><Icons.ChevronLeft /></span>
             </button>
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-500/20">
                 <span className="w-4 h-4 text-white"><Icons.Book /></span>
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-gray-900">{book.name.replace('.pdf', '')}</h2>
+                <h2 className="text-sm font-bold text-gray-900">{book.name.replace('.pdf', '')}</h2>
                 <p className="text-xs text-gray-500">Page {pageNumber} of {numPages || '...'}</p>
               </div>
             </div>
@@ -583,23 +653,27 @@ function PDFReader({ bookId, library, onUpdateBook, onClose }) {
                 {isLoading ? (
                   <div className="flex flex-col items-center justify-center py-16 gap-3">
                     <div className="w-8 h-8 rounded-full border-2 border-gray-200 border-t-blue-500 animate-spin" />
-                    <p className="text-sm text-gray-500">{isSummarizing ? 'Summarizing page...' : 'Getting explanation...'}</p>
-                    <p className="text-xs text-gray-400">{LANGUAGES[summaryLang]?.name || 'English'}</p>
+                    <p className="text-sm font-medium text-gray-700">{isSummarizing ? 'Analyzing page...' : 'Thinking...'}</p>
+                    <p className="text-xs text-gray-400">Usually takes less than 2 seconds</p>
                   </div>
                 ) : !initialGist && messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center px-4">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-5 shadow-inner">
                       <span className="w-8 h-8 text-blue-600"><Icons.Sparkle /></span>
                     </div>
-                    <h4 className="text-sm font-semibold text-gray-900 mb-2">Ready to Help</h4>
-                    <p className="text-sm text-gray-500 leading-relaxed">Select text in the PDF and click "Ask AI" for instant explanations</p>
+                    <h4 className="text-sm font-bold text-gray-900 mb-2">AI Reading Companion</h4>
+                    <p className="text-sm text-gray-500 leading-relaxed">Select any text in the PDF and click "Ask AI" for instant explanations</p>
+                    <div className="mt-4 flex items-center gap-2 text-xs text-gray-400">
+                      <span className="px-2 py-1 rounded-md bg-gray-100">Tip</span>
+                      Try selecting a full paragraph for best results
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {initialGist && (
                       <div className="space-y-3 animate-fade-in">
                         <div className="p-3 rounded-xl bg-blue-50/80 border border-blue-100/60">
-                          <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Selected</p>
+                          <p className="text-xs font-bold text-blue-600 uppercase tracking-wide mb-1">Selected Passage</p>
                           <p className="text-sm text-gray-700 leading-relaxed">"{chatContext.length > 120 ? chatContext.substring(0, 120) + '...' : chatContext}"</p>
                         </div>
                         <div className="flex gap-3">

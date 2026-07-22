@@ -1,7 +1,8 @@
 {
-  "name": "gist-mvp",
+  "name": "gist",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "AI-powered PDF reading companion. Select text, get instant explanations, and chat with your documents.",
   "type": "module",
   "scripts": {
     "dev": "vite",
