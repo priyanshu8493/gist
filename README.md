@@ -34,7 +34,7 @@ Gist turns passive reading into active learning:
 
 - **Frontend:** React 19, Vite, Tailwind CSS 4
 - **PDF Engine:** react-pdf (PDF.js)
-- **AI Backend:** Groq API (OpenAI GPT-OSS 120B, configurable via `VITE_GROQ_MODEL`)
+- **AI Backend:** Groq API via a serverless route (`api/gist.js`), model configurable via `GROQ_MODEL`
 - **Storage:** Local-first (localStorage + Data URLs)
 
 ## Getting Started
@@ -49,7 +49,7 @@ npm install
 
 # Add your Groq API key (free at console.groq.com)
 cp .env.example .env
-# Edit .env and add your key
+# Edit .env and add your key as GROQ_API_KEY
 
 # Start the dev server
 npm run dev
@@ -57,16 +57,15 @@ npm run dev
 
 ## Deploying to Vercel
 
-Vite reads `VITE_*` variables at **build time**, so the key must exist in Vercel before the build runs:
+The Groq key is used only by the serverless function `api/gist.js`, so it can be stored as a proper **Secret** (no `VITE_` prefix) and is never shipped to the browser.
 
 1. Go to your Vercel project → **Settings → Environment Variables**.
-2. Add `VITE_GROQ_API_KEY` with your Groq key. Enable it for **Production**, **Preview**, and **Development** as needed.
-3. Optionally add `VITE_GROQ_MODEL` to change the model (defaults to `openai/gpt-oss-120b`).
-4. **Redeploy** the project (Deployments → ⋯ → Redeploy). Simply editing a variable does not rebuild an existing deployment.
+2. Add **`GROQ_API_KEY`** with your Groq key. It can be marked as a Secret/encrypted, and should be enabled for **Production** (and Preview/Development if needed).
+3. Optionally add `GROQ_MODEL` to change the model (defaults to `openai/gpt-oss-120b`).
+4. Remove the old `VITE_GROQ_API_KEY` / `VITE_GROQ_MODEL` entries if you added them.
+5. **Redeploy** the project (Deployments → ⋯ → Redeploy) so the new `api/gist.js` function is built.
 
-If AI features fail in production, open the browser console: API errors are logged with their status code and response body.
-
-> Note: variables prefixed with `VITE_` are embedded in the browser bundle and are visible to anyone using the app. For a private key, move Groq calls behind a server-side function/proxy.
+If AI features fail in production, the error message shown in the app and the browser console contains the exact reason (for example, a missing key or a Groq status code).
 
 ## Why This Matters
 

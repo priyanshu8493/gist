@@ -5,9 +5,16 @@ import 'react-pdf/dist/Page/TextLayer.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || ''
-const GROQ_MODEL = import.meta.env.VITE_GROQ_MODEL || 'openai/gpt-oss-120b'
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
+const callAI = async (messages, maxTokens = 800) => {
+  const response = await fetch('/api/gist', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, max_tokens: maxTokens }),
+  })
+  const data = await response.json().catch(() => ({}))
+  if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`)
+  return data
+}
 
 const Icons = {
   Plus: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>,
@@ -65,53 +72,35 @@ const LANGUAGES = {
 }
 
 const getGistFromAI = async (selectedText, lang = 'en') => {
-  if (!GROQ_API_KEY) return 'AI is unavailable: the Groq API key is not configured.'
   const langConfig = LANGUAGES[lang] || LANGUAGES.en
   try {
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: GROQ_MODEL, messages: [{ role: 'user', content: `${langConfig.prompt}\n\n"${selectedText}"` }], temperature: 0.7, max_tokens: 500 })
-    })
-    if (!response.ok) {
-      console.error('Groq API error:', response.status, await response.text())
-      throw new Error('API failed')
-    }
-    return response.json().then(data => data.choices[0]?.message?.content || 'Could not generate gist')
-  } catch { return 'Failed to get explanation. Please try again.' }
+    const data = await callAI([{ role: 'user', content: `${langConfig.prompt}\n\n"${selectedText}"` }], 500)
+    return data.choices?.[0]?.message?.content || 'Could not generate gist'
+  } catch (error) {
+    console.error('Gist request failed:', error)
+    return `Failed to get explanation: ${error.message}`
+  }
 }
 
 const getPageSummaryFromAI = async (textContent, lang = 'en') => {
-  if (!GROQ_API_KEY) return 'AI is unavailable: the Groq API key is not configured.'
   const langConfig = LANGUAGES[lang] || LANGUAGES.en
   try {
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: GROQ_MODEL, messages: [{ role: 'user', content: `${langConfig.prompt.replace('2-3 sentences', 'a comprehensive summary')}\n\nProvide a clear summary of this page:\n\n"${textContent.substring(0, 3000)}"` }], temperature: 0.7, max_tokens: 800 })
-    })
-    if (!response.ok) {
-      console.error('Groq API error:', response.status, await response.text())
-      throw new Error('API failed')
-    }
-    return response.json().then(data => data.choices[0]?.message?.content || 'Could not generate summary')
-  } catch { return 'Failed to get summary. Please try again.' }
+    const data = await callAI([{ role: 'user', content: `${langConfig.prompt.replace('2-3 sentences', 'a comprehensive summary')}\n\nProvide a clear summary of this page:\n\n"${textContent.substring(0, 3000)}"` }], 800)
+    return data.choices?.[0]?.message?.content || 'Could not generate summary'
+  } catch (error) {
+    console.error('Summary request failed:', error)
+    return `Failed to get summary: ${error.message}`
+  }
 }
 
-const chatWithAILang = async (messages, lang = 'en') => {
-  if (!GROQ_API_KEY) return { role: 'assistant', content: 'AI is unavailable: the Groq API key is not configured.' }
+const chatWithAILang = async (messages) => {
   try {
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: GROQ_MODEL, messages, temperature: 0.7, max_tokens: 800 })
-    })
-    if (!response.ok) {
-      console.error('Groq API error:', response.status, await response.text())
-      throw new Error('API failed')
-    }
-    return response.json().then(data => data.choices[0]?.message || { role: 'assistant', content: 'Something went wrong' })
-  } catch { return { role: 'assistant', content: lang !== 'en' ? 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।' : 'Sorry, something went wrong.' } }
+    const data = await callAI(messages, 800)
+    return data.choices?.[0]?.message || { role: 'assistant', content: 'Something went wrong' }
+  } catch (error) {
+    console.error('Chat request failed:', error)
+    return { role: 'assistant', content: `Sorry, something went wrong: ${error.message}` }
+  }
 }
 
 function BookCard({ book, onClick, onDelete, index = 0 }) {
