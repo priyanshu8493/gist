@@ -34,7 +34,7 @@ Gist turns passive reading into active learning:
 
 - **Frontend:** React 19, Vite, Tailwind CSS 4
 - **PDF Engine:** react-pdf (PDF.js)
-- **AI Backend:** Groq API (Llama 3.3 70B)
+- **AI Backend:** Groq API (OpenAI GPT-OSS 120B, configurable via `VITE_GROQ_MODEL`)
 - **Storage:** Local-first (localStorage + Data URLs)
 
 ## Getting Started
@@ -54,6 +54,19 @@ cp .env.example .env
 # Start the dev server
 npm run dev
 ```
+
+## Deploying to Vercel
+
+Vite reads `VITE_*` variables at **build time**, so the key must exist in Vercel before the build runs:
+
+1. Go to your Vercel project → **Settings → Environment Variables**.
+2. Add `VITE_GROQ_API_KEY` with your Groq key. Enable it for **Production**, **Preview**, and **Development** as needed.
+3. Optionally add `VITE_GROQ_MODEL` to change the model (defaults to `openai/gpt-oss-120b`).
+4. **Redeploy** the project (Deployments → ⋯ → Redeploy). Simply editing a variable does not rebuild an existing deployment.
+
+If AI features fail in production, open the browser console: API errors are logged with their status code and response body.
+
+> Note: variables prefixed with `VITE_` are embedded in the browser bundle and are visible to anyone using the app. For a private key, move Groq calls behind a server-side function/proxy.
 
 ## Why This Matters
 

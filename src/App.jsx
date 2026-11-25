@@ -6,6 +6,7 @@ import 'react-pdf/dist/Page/TextLayer.css'
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || ''
+const GROQ_MODEL = import.meta.env.VITE_GROQ_MODEL || 'openai/gpt-oss-120b'
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 const Icons = {
@@ -64,42 +65,51 @@ const LANGUAGES = {
 }
 
 const getGistFromAI = async (selectedText, lang = 'en') => {
-  if (!GROQ_API_KEY) return 'Please add your Groq API key in the .env file.'
+  if (!GROQ_API_KEY) return 'AI is unavailable: the Groq API key is not configured.'
   const langConfig = LANGUAGES[lang] || LANGUAGES.en
   try {
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: `${langConfig.prompt}\n\n"${selectedText}"` }], temperature: 0.7, max_tokens: 300 })
+      body: JSON.stringify({ model: GROQ_MODEL, messages: [{ role: 'user', content: `${langConfig.prompt}\n\n"${selectedText}"` }], temperature: 0.7, max_tokens: 500 })
     })
-    if (!response.ok) throw new Error('API failed')
+    if (!response.ok) {
+      console.error('Groq API error:', response.status, await response.text())
+      throw new Error('API failed')
+    }
     return response.json().then(data => data.choices[0]?.message?.content || 'Could not generate gist')
   } catch { return 'Failed to get explanation. Please try again.' }
 }
 
 const getPageSummaryFromAI = async (textContent, lang = 'en') => {
-  if (!GROQ_API_KEY) return 'Please add your Groq API key in the .env file.'
+  if (!GROQ_API_KEY) return 'AI is unavailable: the Groq API key is not configured.'
   const langConfig = LANGUAGES[lang] || LANGUAGES.en
   try {
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: `${langConfig.prompt.replace('2-3 sentences', 'a comprehensive summary')}\n\nProvide a clear summary of this page:\n\n"${textContent.substring(0, 3000)}"` }], temperature: 0.7, max_tokens: 500 })
+      body: JSON.stringify({ model: GROQ_MODEL, messages: [{ role: 'user', content: `${langConfig.prompt.replace('2-3 sentences', 'a comprehensive summary')}\n\nProvide a clear summary of this page:\n\n"${textContent.substring(0, 3000)}"` }], temperature: 0.7, max_tokens: 800 })
     })
-    if (!response.ok) throw new Error('API failed')
+    if (!response.ok) {
+      console.error('Groq API error:', response.status, await response.text())
+      throw new Error('API failed')
+    }
     return response.json().then(data => data.choices[0]?.message?.content || 'Could not generate summary')
   } catch { return 'Failed to get summary. Please try again.' }
 }
 
 const chatWithAILang = async (messages, lang = 'en') => {
-  if (!GROQ_API_KEY) return { role: 'assistant', content: 'Please add your Groq API key' }
+  if (!GROQ_API_KEY) return { role: 'assistant', content: 'AI is unavailable: the Groq API key is not configured.' }
   try {
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages, temperature: 0.7, max_tokens: 600 })
+      body: JSON.stringify({ model: GROQ_MODEL, messages, temperature: 0.7, max_tokens: 800 })
     })
-    if (!response.ok) throw new Error('API failed')
+    if (!response.ok) {
+      console.error('Groq API error:', response.status, await response.text())
+      throw new Error('API failed')
+    }
     return response.json().then(data => data.choices[0]?.message || { role: 'assistant', content: 'Something went wrong' })
   } catch { return { role: 'assistant', content: lang !== 'en' ? 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।' : 'Sorry, something went wrong.' } }
 }
@@ -409,7 +419,7 @@ function PDFReader({ bookId, library, onUpdateBook, onClose }) {
   const [initialGist, setInitialGist] = useState(null)
   const [chatContext, setChatContext] = useState('')
   const [isSummarizing, setIsSummarizing] = useState(false)
-  const [summaryLang, setSummaryLang] = useState('en')
+  const [, setSummaryLang] = useState('en')
   const [activeLang, setActiveLang] = useState('en')
   
   const viewerRef = useRef(null)
