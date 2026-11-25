@@ -6,14 +6,24 @@ import 'react-pdf/dist/Page/TextLayer.css'
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 const callAI = async (messages, maxTokens = 800) => {
-  const response = await fetch('/api/gist', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages, max_tokens: maxTokens }),
-  })
-  const data = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`)
-  return data
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 25000)
+  try {
+    const response = await fetch('/api/gist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, max_tokens: maxTokens }),
+      signal: controller.signal,
+    })
+    const data = await response.json().catch(() => ({}))
+    if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`)
+    return data
+  } catch (error) {
+    if (error.name === 'AbortError') throw new Error('The AI request timed out. Please try again.')
+    throw error
+  } finally {
+    clearTimeout(timeout)
+  }
 }
 
 const Icons = {
@@ -653,7 +663,7 @@ function PDFReader({ bookId, library, onUpdateBook, onClose }) {
                   <div className="flex flex-col items-center justify-center py-16 gap-3">
                     <div className="w-8 h-8 rounded-full border-2 border-gray-200 border-t-blue-500 animate-spin" />
                     <p className="text-sm font-medium text-gray-700">{isSummarizing ? 'Analyzing page...' : 'Thinking...'}</p>
-                    <p className="text-xs text-gray-400">Usually takes less than 2 seconds</p>
+                    <p className="text-xs text-gray-400">This can take a few seconds</p>
                   </div>
                 ) : !initialGist && messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center px-4">
